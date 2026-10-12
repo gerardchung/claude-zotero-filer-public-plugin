@@ -1,0 +1,12 @@
+{
+  "name": "zotero-filer",
+  "owner": { "name": "gerardchung" },
+  "description": "Claude Code plugin for Zotero: your to-read list, and filing papers into the right folder.",
+  "plugins": [
+    {
+      "name": "zotero-filer",
+      "source": ".",
+      "description": "See what is in your Zotero to-read folder, file papers after reading, and add new papers, with folder suggestions from Claude."
+    }
+  ]
+}

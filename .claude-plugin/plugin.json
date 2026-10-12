@@ -1,0 +1,11 @@
+{
+  "name": "zotero-filer",
+  "version": "1.0.0",
+  "description": "See what is in your Zotero to-read folder, file papers after reading, and add new papers, with folder suggestions from Claude.",
+  "author": { "name": "gerardchung" },
+  "homepage": "https://github.com/gerardchung/claude-zotero-filer-public-plugin",
+  "repository": "https://github.com/gerardchung/claude-zotero-filer-public-plugin",
+  "license": "MIT",
+  "keywords": ["zotero", "research", "papers", "reading-list", "references"],
+  "skills": ["./.claude/skills/"]
+}

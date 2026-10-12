@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+# Never commit keys or personal settings
+.env
+.env.*
+*.local.json
+.claude/settings.local.json
