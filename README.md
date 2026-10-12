@@ -25,6 +25,11 @@ deletes papers or folders.
 
 ![Claude showing a numbered to-read list from Zotero](docs/to-read-example.png)
 
+**Example:** after reading a paper, Claude suggests where to file it. You tick one or
+more folders, or type another one under "Other":
+
+![Claude suggesting Zotero folders for a paper, as a choice card](docs/filing-example.png)
+
 ---
 
 ## What it can do
