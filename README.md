@@ -21,6 +21,10 @@ With this plugin, I just talk to Claude:
 Claude always asks before it files anything or takes something off your list. It never
 deletes papers or folders.
 
+**Example:** asking for the to-read list (made-up papers):
+
+![Claude showing a numbered to-read list from Zotero](docs/to-read-example.png)
+
 ---
 
 ## What it can do

@@ -21,7 +21,8 @@ def repo_files():
     if not names:  # not a git checkout: scan everything except caches
         names = [str(p.relative_to(ROOT)) for p in ROOT.rglob("*")
                  if p.is_file() and ".git" not in p.parts and "__pycache__" not in p.parts]
-    return [n for n in names if n != "LICENSE"]
+    binary = (".png", ".jpg", ".jpeg", ".gif", ".pdf")
+    return [n for n in names if n != "LICENSE" and not n.lower().endswith(binary)]
 
 
 def test_no_personal_data_in_repo():
