@@ -40,60 +40,11 @@ their API key into the chat.
 Folders are always passed by **key**, never by name. Get keys from `collections`.
 Use the user's words for folders in chat ("PhD > Ch2 > Measurement"), never keys.
 
-## How to show results
-
-Keep replies easy to scan. Do not write paragraphs of reasons.
-
-- When you show 2 or more items with details, use a Markdown table.
-- At most one short line before a table and one short line after it.
-- Reasons are one short phrase (about 15 words or fewer) and concrete: name the
-  similar papers already in that folder, or the topic that matches.
-- Always show full folder paths, for example `Research > Methods > Surveys`.
-
-**Table 1: to-read list**
-
-| # | Title | Authors (year) | Journal | Added | PDF | Also in |
-|---|---|---|---|---|---|---|
-| 1 | Loneliness interventions for older adults | Tan & Ong (2025) | Aging & Mental Health | 10 Oct | ✓ | — |
-
-"Also in" lists any other folders the paper is in, or "—".
-
-**Table 2: folder suggestions**. One row per suggestion. Show this table, then ask.
-
-| Paper # | Paper | Suggested folder | Fit | Why |
-|---|---|---|---|---|
-| 2 | Co-designing AI tools with nurses (Lim et al.) | Technology > Human-AI collaboration | Best | Sits with your other papers on involving workers in AI design |
-| 2 | | Technology > Values | Good | Worker-centred critique, like your papers on fairness at work |
-| 2 | | Technology > Data stewardship | Possible | Some overlap with your participatory data papers |
-| 2 | | *New:* Technology > Participatory AI | New folder | No folder for co-design of AI yet |
-
-- Fit is one of: **Best**, **Good**, **Possible**, **New folder**.
-- For a new paper with no list number, write "new" in the Paper # column.
-- For several papers at once, use one table with all rows, grouped by Paper #.
-- After the table, add one line saying where the paper is now (for example
-  "Now only in To read"), then ask with AskUserQuestion.
-
-**Table 3: after filing**
-
-| Paper # | Paper | Now in | Removed from To read | Tagged |
-|---|---|---|---|---|
-
-**Table 4: title search results**, when asking which paper the user means
-
-| Option | Title | Authors (year) | Journal | Match |
-|---|---|---|---|---|
-
-**Table 5: already in Zotero**
-
-| Paper | Already in folders | Added |
-|---|---|---|
-
 ## Job 1: add a new paper
 
 1. **Find the details.** Run `lookup` on what the user gave.
    - `input_type: "title"` gives up to 3 search results with a `match` score. If the
-     top one is not close to 1.0, or several look alike, show them as Table 4 and ask
-     the user which one.
+     top one is not close to 1.0, or several look alike, ask the user which one.
    - `input_type: "pdf"`: check `title_found_in_pdf`. If it is false, or there are no
      candidates, read `pdf_text_start`, find the real title, and run `lookup` again with
      that title. Keep the PDF path for step 5.
@@ -103,7 +54,7 @@ Keep replies easy to scan. Do not write paragraphs of reasons.
    - Save the chosen candidate (one object) to a temp JSON file for `add --meta`.
 
 2. **Check for duplicates.** Run `find-dup` with the DOI and title. If a duplicate
-   exists, show it as Table 5. Offer to add that existing item to new
+   exists, tell the user where it already is. Offer to add that existing item to new
    folders with `refile` instead of making a copy.
 
 3. **"Read later" shortcut.** If the user said "to read", "read later", "save for later",
@@ -113,7 +64,7 @@ Keep replies easy to scan. Do not write paragraphs of reasons.
    and keywords with each folder's `path` and `sample_titles`.
    - Pick the 1–3 best folders. Prefer the most specific (deepest) folder that fits.
      Suggest more than one only when the paper really belongs in several.
-   - Give each suggestion one short reason. Show all suggestions as Table 2 first.
+   - Give each suggestion one short reason ("matches your other loneliness scales papers").
    - Ask with **AskUserQuestion**, `multiSelect: true`, max 4 options:
      your suggestions (label = folder path, description = reason) plus **"To read"**.
      The user can type something else in "Other", such as another folder or a new folder name.
@@ -128,12 +79,13 @@ Keep replies easy to scan. Do not write paragraphs of reasons.
 6. **Add it.** Run `add --meta FILE --collections KEYS [--to-read] [--pdf PATH]`.
    If `pdf_error` is present, say that the paper was saved but the PDF was not.
 
-7. **Report back** with Table 3, plus one line on whether the PDF is attached.
+7. **Report back** in one or two lines: the title, the folders, whether the PDF is attached.
 
 ## Job 2: show the "To read" list
 
 When the user says "what's on my to-read list", "show my reading list", or similar:
-- Run `to-read`. Show it as Table 1, using `n` for the # column.
+- Run `to-read`. Show a short numbered list using `n`:
+  `n. Title — Authors (year), Journal · added date · PDF ✓/✗`.
 - If `total` is more than `shown`, say how many more there are.
 - If the user asks to filter ("only the ones about measurement"), use the titles,
   abstracts, folders and tags in the output. Do not invent anything.
@@ -142,18 +94,17 @@ When the user says "what's on my to-read list", "show my reading list", or simil
 
 When the user says "I finished #3", "I read the Smith 2024 paper", or similar:
 1. Run `to-read` and find the paper by its number or name. Confirm which one if unclear.
-2. Run `collections` and suggest folders as in Job 1, step 4, shown as Table 2.
-   Mention any folders it is already in (`folders`) in the line after the table.
-   Do not offer "To read" as a choice here.
+2. Run `collections` and suggest folders as in Job 1, step 4. Mention any folders
+   it is already in (`folders`). Do not offer "To read" as a choice here.
 3. Ask with AskUserQuestion. In the same call, add a second question:
    "Remove it from To read?" with the options "Yes (Recommended)" and "No, keep it there".
 4. Run `refile --item KEY --add KEYS --tag read`, adding `--remove-to-read` if the user
    said yes. Removing only takes the paper out of the folder; it stays in the library.
-5. Report back with Table 3.
+5. Report the folders before and after.
 
 **Several at once** ("sort the ones I've read"): show the list, ask which ones they
 have read (multi-select, or let them type numbers), then do steps 2–4 for each paper,
-one at a time. You may show Table 2 for all of them at once, then ask about each.
+one at a time.
 
 ## Rules
 
